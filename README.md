@@ -11,7 +11,7 @@ A comprehensive e-commerce platform that allows users to browse products, add th
 - Responsive design for mobile and desktop
 
 ## Technologies Used
-- Frontend: HTML, CSS, JavaScript, React
+- Frontend: HTML,EJS,Tailwind.
 - Backend: Node.js, Express
 - Database: MongoDB
 - Authentication: JWT
