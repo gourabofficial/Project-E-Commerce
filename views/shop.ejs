@@ -1,45 +1,116 @@
-<%- include('./partials/header') %>
+ <%- include('./partials/header') %>
+
 <div class="w-full h-screen flex items-start px-20 py-20">
     <div class="w-[25%] flex h-screen flex-col items-start">
         <div class="flex items-center gap-2">
             <h3>Sort by</h3>
-            <form action="/shop">
-                <select class="border-[1px] px-2 py-1" name="sortby" id="">
+            <form action="/shop" method="GET">
+                <select class="border-[1px] px-2 py-1" name="sortby">
                     <option value="popular">Popular</option>
                     <option value="newest">Newest</option>
                 </select>
+                <button type="submit" class="hidden"></button>
             </form>
         </div>
+
         <div class="flex flex-col mt-20">
-            <a class="block w-fit mb-2" href="">New Collection</a>
-            <a class="block w-fit mb-2" href="">All Products</a>
-            <a class="block w-fit mb-2" href="">Discounted Products</a>
+            <a class="block w-fit mb-2" href="#">New Collection</a>
+            <a class="block w-fit mb-2" href="#">All Products</a>
+            <a class="block w-fit mb-2" href="#">Discounted Products</a>
         </div>
+
         <div class="mt-32">
-            <a class="block w-fit mb-2" href="">Filter by :</a>
-            <a class="block w-fit mb-2" href="">Availability</a>
-            <a class="block w-fit mb-2" href="">Discount</a>
+            <a class="block w-fit mb-2" href="#">Filter by :</a>
+            <a class="block w-fit mb-2" href="#">Availability</a>
+            <a class="block w-fit mb-2" href="#">Discount</a>
         </div>
     </div>
+
     <div class="w-[75%] flex flex-col gap-5 h-screen">
-        <div class="flex items-start gap-5">
-            <% products.forEach(function(product){ %>
-                <div class="w-60">
-                    <div class="w-full h-52 flex items-center justify-center bg-[<%= product.bgcolor %>]">
-                        <img class="h-[12rem]" src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" alt="">
-                    </div>
-                    <div class="flex justify-between bg-[<%= product.panelcolor %>] items-center px-4 py-4 text-[<%= product.textcolor %>]">
-                        <div>
-                            <h3><%= product.name %></h3>
-                            <h4>₹ <%= product.price %></h4>
+        <% if (typeof products !== 'undefined' && products.length > 0) { %>
+            <div class="grid grid-cols-3 gap-5">
+                <% products.forEach(function(product) { %>
+                    <div class="w-60">
+                        <div class="w-full h-52 flex items-center justify-center bg-[<%= product.bgcolor || '#f5f5f5' %>]">
+                            <img 
+                                class="h-[12rem]" 
+                                src="<%= product.image ? 'data:image/jpeg;base64,' + product.image.toString('base64') : '/images/default.jpg' %>" 
+                                alt="<%= product.name || 'Product Image' %>">
                         </div>
-                        <a class="w-7 h-7 flex items-center justify-center rounded-full bg-white" href="">
-                            <i class="ri-add-line"></i>
-                        </a>
+                        
+                        <div class="flex justify-between bg-[<%= product.panelcolor || '#ffffff' %>] items-center px-4 py-4 text-[<%= product.textcolor || '#000000' %>]">
+                            <div>
+                                <h3><%= product.name || 'Unnamed Product' %></h3>
+                                <h4>₹ <%= product.price || '0' %></h4>
+                            </div>
+                            <a 
+                                class="w-7 h-7 flex items-center justify-center rounded-full bg-white hover:bg-gray-200 transition-all" 
+                                href="#">
+                                <i class="ri-add-line"></i>
+                            </a>
+                        </div>
                     </div>
-                </div>
-            <% }) %>
-        </div>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <div class="flex justify-center items-center h-full">
+                <h2 class="text-2xl text-gray-500">No products available at the moment.</h2>
+            </div>
+        <% } %>
     </div>
 </div>
-<%- include('./partials/footer') %>
+
+<%- include('./partials/footer') %> 
+
+
+
+ <!-- <%- include('./partials/header') %>
+
+    <% if(error.length>0){ %>
+        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-red-500">
+            <span class="inline-block mt-1 mb-1 text-white">
+                <%= error %>
+            </span>
+        </div>
+        <% } %>
+            <div class="w-full h-screen flex px-20">
+                <div class="w-1/2 flex items-center justify-center h-screen">
+                    <div class="w-full px-32">
+                        <h3 class="text-4xl">welcome to <span class="text-blue-400 font-semibold">Scatch</span></h3>
+                        <h4 class="text-2xl mb-5">create your account</h4>
+                        <form autocomplete="off" action="/users/register" method="post">
+                            <input
+                                class="bg-zinc-100 block w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200"
+                                type="text" placeholder="Full Name" name="fullname">
+                            <input
+                                class="bg-zinc-100 block w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200"
+                                type="email" placeholder="Email" name="email">
+                            <input
+                                class="bg-zinc-100 block w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200"
+                                type="password" placeholder="Password" name="password">
+                            <input class="px-5 rounded-full py-3 mt-2 bg-blue-500 text-white" type="submit"
+                                value="Create My Account">
+                        </form>
+                    </div>
+                </div>
+                <div class="w-1/2 flex items-center justify-center h-screen">
+                    <div class="w-full px-32">
+                        <h4 class="text-2xl capitalize mb-5">login your account</h4>
+                        <form autocomplete="off" action="/users/login" method="post">
+                            <input
+                                class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200"
+                                type="email" placeholder="Email" name="email">
+                            <input
+                                class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200"
+                                type="password" placeholder="Password" name="password">
+                            <input class="px-5 block rounded-full py-3 mt-2 bg-blue-500 text-white" type="submit"
+                                value="Login">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <%- include('./partials/footer') %>  -->
+
+
+
+

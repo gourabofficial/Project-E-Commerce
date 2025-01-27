@@ -36,49 +36,56 @@ module.exports.registerUser = async function (req, res) {
   }
 }
 
-// module.exports.loginUser = async function (req, res) {
-//   let { email, password } = req.body;
-
-//   let user = await userModel.findOne({ email: email });
-//   if (!user) res.send("Email or Password incorrect");
-
-//   bcrypt.compare(password, user.password, function (err, result) { 
-//     if (result) {
-//       let token = generateToken(user)
-//       res.cookie("token", token)
-//       res.send("you can Login ")
-//     }
-//     else {
-//       res.send("Email or Password incorrect");
-//     }
-//   })
-// }
-
 module.exports.loginUser = async function (req, res) {
   let { email, password } = req.body;
 
   try {
     let user = await userModel.findOne({ email: email });
     if (!user) {
-      req.flash("error", "Email or Password incorrect");
-      return res.redirect('/');
+      return res.render("shop", { error: "Email or Password incorrect" }); // Render with error
     }
 
-    bcrypt.compare(password, user.password, function (err, result) { 
+    bcrypt.compare(password, user.password, function (err, result) {
       if (result) {
         let token = generateToken(user);
         res.cookie("token", token);
-        res.redirect("/shop");
+        res.redirect("/shop"); // Redirect to shop
       } else {
-        req.flash("error", "Email or Password incorrect");
-        res.redirect('/');
+        res.render("shop", { error: "Email or Password incorrect" }); // Render with error
       }
     });
-  } catch (error) {
-    req.flash("error", error.message);
-    res.redirect('/');
+  } catch (err) {
+    console.error("Error logging in user:", err);
+    res.render("shop", { error: "An unexpected error occurred. Please try again later." });
   }
 };
+
+
+// module.exports.loginUser = async function (req, res) {
+//   let { email, password } = req.body;
+
+//   try {
+//     let user = await userModel.findOne({ email: email });
+//     if (!user) {
+//       req.flash("error", "Email or Password incorrect");
+//       return res.redirect('/');
+//     }
+
+//     bcrypt.compare(password, user.password, function (err, result) { 
+//       if (result) {
+//         let token = generateToken(user);
+//         res.cookie("token", token);
+//         res.redirect("/shop");
+//       } else {
+//         req.flash("error", "Email or Password incorrect");
+//         res.redirect('/');
+//       }
+//     });
+//   } catch (error) {
+//     req.flash("error", error.message);
+//     res.redirect('/');
+//   }
+// };
 
 
 module.exports.logoutUser = async function (req, res) {

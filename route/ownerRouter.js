@@ -5,8 +5,9 @@ const ownerModel = require('../model/owner-model');
 
 
 
-router.get('/', (req, res) => {
-  res.send("working good")
+router.get('/admin', (req, res) => {
+ let success =  req.flash("success", "Product created successfully");
+  res.render("createproducts", { success}); 
 });
 
 
