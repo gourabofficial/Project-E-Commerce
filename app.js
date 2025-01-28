@@ -11,6 +11,7 @@ const ownerRouter = require("./route/ownerRouter");
 const usersRouter = require("./route/usersRouter"); 
 const productsRouter = require("./route/productsRouter"); 
 const indexRouter = require("./route/index")
+const shopRoutes = require('./route/shopRouts');
 
 
 require("dotenv").config();
@@ -46,7 +47,7 @@ app.get('/shop', (req, res) => {
 })
 
 
-
+app.use('/',shopRoutes)
 app.use('/', indexRouter);
 app.use("/owners", ownerRouter);
 app.use("/users", usersRouter);
