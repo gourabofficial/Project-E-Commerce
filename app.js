@@ -22,7 +22,6 @@ app.set('view engine', 'ejs');
 app.use(cookieParser());
 
 
-console.log("Session Secret:", process.env.EXPRESS_SESSION_SECRET);
 app.use(
   expressSession({
     resave: false,
