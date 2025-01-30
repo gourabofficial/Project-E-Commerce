@@ -1,13 +1,13 @@
+
 const express = require('express');
 const router = express.Router();
 const ownerModel = require('../model/owner-model');
 
 
 
-
 router.get('/admin', (req, res) => {
  let success =  req.flash("success", "Product created successfully");
-  res.render("createproducts", { success}); 
+  res.render("createproduct", { success}); 
 });
 
 

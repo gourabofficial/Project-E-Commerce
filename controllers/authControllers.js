@@ -1,4 +1,5 @@
 
+
 const userModel = require('../model/user-model');
 const productModel = require('../model/product-model');
 const bcrypt = require('bcrypt');
@@ -36,36 +37,6 @@ module.exports.registerUser = async function (req, res) {
     res.send(error.message);
   }
 }
-
-
-
-
-
-
-
-// module.exports.loginUser = async function (req, res) {
-//   let { email, password } = req.body;
-
-//   try {
-//     let user = await userModel.findOne({ email: email });
-//     if (!user) {
-//       return res.render("shop", { error: "Email or Password incorrect" }); // Render with error
-//     }
-
-//     bcrypt.compare(password, user.password, function (err, result) {
-//       if (result) {
-//         let token = generateToken(user);
-//         res.cookie("token", token);
-//         res.redirect("/shop"); // Redirect to shop
-//       } else {
-//         res.render("shop", { error: "Email or Password incorrect" }); // Render with error
-//       }
-//     });
-//   } catch (err) {
-//     console.error("Error logging in user:", err);
-//     res.render("shop", { error: "An unexpected error occurred. Please try again later." });
-//   }
-// };
 
 
 module.exports.loginUser = async function (req, res) {
