@@ -12,6 +12,7 @@ const usersRouter = require("./route/usersRouter");
 const productsRouter = require("./route/productsRouter"); 
 const indexRouter = require("./route/indexRouter")
 const shopRoutes = require('./route/shopRouter');
+const isLoggedin = require('./middlewares/isLoggedin');
 
 
 require("dotenv").config();
@@ -42,9 +43,8 @@ app.get('/login', (req, res) => {
   res.render('index', { error: req.flash("error") });
 });
 
-app.get('/shop', (req, res) => {
-  res.render('shop',{error: req.flash("error")});
-})
+
+  
 
 
 app.use('/',shopRoutes)
@@ -55,6 +55,6 @@ app.use("/product", productsRouter);
 
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Server started ,port: ${port}`)
 })
      

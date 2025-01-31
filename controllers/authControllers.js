@@ -1,72 +1,79 @@
-
-
 const userModel = require('../model/user-model');
-const productModel = require('../model/product-model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { generateToken } = require('../utils/generateToken')
-
-
+const { generateToken } = require('../utils/generateToken');
 
 module.exports.registerUser = async function (req, res) {
   try {
-    let { email, password, fullname } = req.body;
+    console.log('Registration request received:', req.body);
 
-    let user = await userModel.findOne({ email: email });
-    if(user) return res.status(401).send("you already have account ")
-
-    bcrypt.genSalt(10, function (err, salt) {
-      bcrypt.hash(password, salt, async function (err, hash) {
-        if (err) res.send(err.message);
-        else {
-          let user = await userModel.create({
-            email,
-            password: hash,
-            fullname,
-          });
-          let token = generateToken(user)
-          res.cookie("token", token);
-          res.send("User created successfully");
-        }
-      })
-    });
-
-
-  }
-  catch (error) {
-    res.send(error.message);
-  }
-}
-
-
-module.exports.loginUser = async function (req, res) {
-  let { email, password } = req.body;
-
-  try {
-    let user = await userModel.findOne({ email: email });
-    if (!user) {
-      req.flash("error", "Email or Password incorrect");
-      return res.redirect('/');
+    const { email, password, fullname } = req.body;
+    const user = await userModel.findOne({ email });
+    if (user) {
+      console.log('User already exists:', email);
+      req.flash('error', 'You already have an account');
+      return res.redirect('/register');
     }
 
-    bcrypt.compare(password, user.password, function (err, result) { 
-      if (result) {
-        let token = generateToken(user);
-        res.cookie("token", token);
-        res.redirect("/shop");
-      } else {
-        req.flash("error", "Email or Password incorrect");
-        res.redirect('/');
-      }
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(password, salt);
+    console.log('Password hashed successfully');
+
+    const newUser = await userModel.create({
+      email,
+      password: hash,
+      fullname,
     });
+    console.log('User created:', newUser);
+
+    const token = generateToken(newUser);
+    console.log('Token generated:', token);
+
+    res.cookie('token', token, { httpOnly: true });
+    console.log('Token cookie set');
+
+    req.flash('success', 'Account created successfully');
+    res.redirect('/shop');
   } catch (error) {
-    req.flash("error", error.message);
-    res.redirect('/');
+    console.error('Error during registration:', error);
+    req.flash('error', 'Something went wrong');
+    res.redirect('/register');
   }
 };
 
+module.exports.loginUser = async function (req, res) {
+  const { email, password } = req.body;
+
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      req.flash('error', 'Email or Password incorrect');
+      return res.redirect('/login');
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      req.flash('error', 'Email or Password incorrect');
+      return res.redirect('/login');
+    }
+
+    const token = generateToken(user);
+    res.cookie('token', token, { httpOnly: true });
+    res.redirect('/shop');
+  } catch (error) {
+    req.flash('error', error.message);
+    res.redirect('/login');
+  }
+};
 
 module.exports.logoutUser = async function (req, res) {
-  res.cookie("token","");
-  res.redirect("/");
-}
+  try {
+    res.clearCookie("token");
+    req.flash("success", "You have been logged out successfully");
+    res.redirect("/");
+  } catch (error) {
+    console.error("Error during logout:", error);
+    req.flash("error", "Something went wrong during logout");
+    res.redirect("/");
+  }
+};

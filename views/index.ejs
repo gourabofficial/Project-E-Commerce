@@ -1,11 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <h1>index page</h1>
-</body>
-</html>
+<%- include('./partials/header') %>
+
+<!-- Error Message -->
+<% if(error.length > 0) { %>
+  <div class="absolute top-16 left-1/2 transform -translate-x-1/2 p-4 rounded-lg bg-red-500 shadow-lg">
+    <span class="text-white font-medium"><%= error %></span>
+  </div>
+<% } %>
+
+<!-- Main Content -->
+<div class="w-full h-screen flex px-20 bg-gradient-to-r from-blue-50 to-purple-50">
+  <!-- Left Section: Register -->
+  <div class="w-1/2 flex items-center justify-center h-screen">
+    <div class="w-full max-w-md px-8 py-10 bg-white rounded-xl shadow-lg">
+      <h3 class="text-4xl font-bold mb-2">Welcome to <span class="text-blue-500">Product Store</span></h3>
+      <h4 class="text-2xl text-gray-600 mb-6">Create Your Account</h4>
+      <form autocomplete="off" action="/users/register" method="post">
+        <input
+          class="w-full px-4 py-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          type="text" placeholder="Full Name" name="fullname" required>
+        <input
+          class="w-full px-4 py-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          type="email" placeholder="Email" name="email" required>
+        <input
+          class="w-full px-4 py-3 mb-6 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          type="password" placeholder="Password" name="password" required>
+        <button
+          class="w-full px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all"
+          type="submit">
+          Create My Account
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Right Section: Login -->
+  <div class="w-1/2 flex items-center justify-center h-screen">
+    <div class="w-full max-w-md px-8 py-10 bg-white rounded-xl shadow-lg">
+      <h4 class="text-2xl font-bold text-gray-800 mb-6">Login to Your Account</h4>
+      <form autocomplete="off" action="/users/login" method="post">
+        <input
+          class="w-full px-4 py-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          type="email" placeholder="Email" name="email" required>
+        <input
+          class="w-full px-4 py-3 mb-6 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          type="password" placeholder="Password" name="password" required>
+        <button
+          class="w-full px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all"
+          type="submit">
+          Login
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('./partials/footer') %>
