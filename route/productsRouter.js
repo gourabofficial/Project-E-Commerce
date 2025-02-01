@@ -1,8 +1,10 @@
 
+
 const express = require('express');
 const router = express.Router();
 const upload = require('../config/multer-config');
 const productModel = require('../model/product-model');
+
 
 router.post('/create', upload.single('image'), async (req, res) => {
   try {
@@ -19,7 +21,9 @@ router.post('/create', upload.single('image'), async (req, res) => {
     });
 
     req.flash("success", "Product created successfully");
-    res.redirect("/owners/admin");
+    // res.redirect("/owners/admin");
+    res.redirect("/shop");
+
   } catch (error) {
     req.flash( error.message);
   }

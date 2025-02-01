@@ -44,8 +44,6 @@ app.get('/login', (req, res) => {
 });
 
 
-  
-
 
 app.use('/',shopRoutes)
 app.use('/', indexRouter);
