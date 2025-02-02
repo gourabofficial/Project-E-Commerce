@@ -13,6 +13,7 @@ const productsRouter = require("./route/productsRouter");
 const indexRouter = require("./route/indexRouter")
 const shopRoutes = require('./route/shopRouter');
 const isLoggedin = require('./middlewares/isLoggedin');
+const addtoCart = require('./route/addToCart');
 
 
 require("dotenv").config();
@@ -50,6 +51,7 @@ app.use('/', indexRouter);
 app.use("/owners", ownerRouter);
 app.use("/users", usersRouter);
 app.use("/product", productsRouter);
+app.use('/',addtoCart)
 
 
 app.listen(port, () => {

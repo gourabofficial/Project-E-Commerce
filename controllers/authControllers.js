@@ -17,25 +17,24 @@ module.exports.registerUser = async function (req, res) {
 
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
-    console.log('Password hashed successfully');
+  
 
     const newUser = await userModel.create({
       email,
       password: hash,
       fullname,
     });
-    console.log('User created:', newUser);
+    
 
     const token = generateToken(newUser);
-    console.log('Token generated:', token);
+   
 
     res.cookie('token', token, { httpOnly: true });
     console.log('Token cookie set');
 
     req.flash('success', 'Account created successfully');
-    res.redirect('/shop');
+    res.redirect('/login'); // i will change 
   } catch (error) {
-    console.error('Error during registration:', error);
     req.flash('error', 'Something went wrong');
     res.redirect('/register');
   }
@@ -69,7 +68,6 @@ module.exports.loginUser = async function (req, res) {
 module.exports.logoutUser = async function (req, res) {
   try {
     res.clearCookie("token");
-    req.flash("success", "You have been logged out successfully");
     res.redirect("/");
   } catch (error) {
     console.error("Error during logout:", error);

@@ -1,56 +1,79 @@
 <%- include('./partials/header') %>
 
-<!-- Main Content -->
-<div class="w-full min-h-screen flex items-start px-20 py-20 bg-gradient-to-r from-blue-50 to-purple-50">
-  <!-- Cart Items -->
-  <div class="w-[30%] bg-white rounded-xl shadow-lg overflow-hidden">
-    <div class="w-full h-64 bg-yellow-500"></div>
-    <div class="p-6">
-      <h3 class="text-2xl font-bold text-gray-800 mb-4">Clinge Bag</h3>
-      <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center gap-2">
-          <button class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-all">
-            <i class="ri-subtract-line text-gray-600"></i>
-          </button>
-          <span class="px-4 py-2 bg-gray-100 rounded-lg">01</span>
-          <button class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-all">
-            <i class="ri-add-line text-gray-600"></i>
+<div class="w-full min-h-screen flex items-start px-10 py-20 bg-gray-50">
+  <div class="w-full max-w-6xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8">Your Cart</h1>
+
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+
+      <div class="hidden md:flex bg-gray-100 px-6 py-4 border-b border-gray-200">
+        <div class="w-1/2 font-semibold text-gray-700">Product</div>
+        <div class="w-1/4 font-semibold text-gray-700 text-center">Quantity</div>
+        <div class="w-1/4 font-semibold text-gray-700 text-right">Price</div>
+        <div class="w-20"></div> <!-- Space for delete button -->
+      </div>
+
+     
+      <% cart.forEach(function(product){ %>
+        <div class="flex flex-col md:flex-row items-center px-6 py-4 border-b border-gray-200 hover:bg-gray-50 transition-all">
+          <!-- Product Image and Name -->
+          <div class="w-full md:w-1/2 flex items-center space-x-4">
+            <div class="w-20 h-20 flex items-center justify-center bg-[<%= product.bgcolor %>] rounded-lg">
+              <img
+                class="h-16 object-cover"
+                src="data:image/jpeg;base64,<%= product.image.toString('base64') %>"
+                alt="<%= product.name %>"
+              />
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-[<%= product.textcolor %>]">
+                <%= product.name %>
+              </h3>
+              <p class="text-sm text-gray-600">₹ <%= product.price %></p>
+            </div>
+          </div>
+
+          
+          <div class="w-full md:w-1/4 flex justify-center mt-4 md:mt-0">
+            <div class="flex items-center border border-gray-300 rounded-lg">
+              <button class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-all">
+                <i class="ri-subtract-line"></i>
+              </button>
+              <span class="w-8 h-8 flex items-center justify-center text-gray-800">1</span>
+              <button class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-all">
+                <i class="ri-add-line"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Price -->
+          <div class="w-full md:w-1/4 text-right mt-4 md:mt-0">
+            <p class="text-lg font-semibold text-gray-800">₹ <%= product.price %></p>
+          </div>
+
+     
+          <div class="w-20 flex justify-end mt-4 md:mt-0">
+            <form action="/cart/remove/<%= product._id %>" method="POST">
+              <button type="submit" class="text-red-600 hover:text-red-800 transition-all">
+                <i class="ri-delete-bin-line text-xl"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+
+
+      <div class="px-6 py-4 bg-gray-100">
+        <div class="flex justify-between items-center">
+          <p class="text-lg font-semibold text-gray-800">Total</p>
+          <p class="text-xl font-bold text-gray-800">₹ <%= cart.reduce((total, product) => total + product.price, 0) %></p>
+        </div>
+        <div class="mt-4">
+          <button class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-all">
+            Checkout
           </button>
         </div>
-        <span class="text-lg font-semibold text-gray-800">₹ 1200</span>
       </div>
-      <div class="flex items-center justify-between">
-        <h4 class="text-lg text-gray-600">Net Total</h4>
-        <h2 class="text-lg font-bold text-gray-800">₹ 1200</h2>
-      </div>
-    </div>
-  </div>
-
-  <!-- Price Breakdown -->
-  <div class="w-[70%] bg-white rounded-xl shadow-lg p-8 ml-8">
-    <h3 class="text-2xl font-bold text-gray-800 mb-6">Price Breakdown</h3>
-    <div class="space-y-4">
-      <div class="flex justify-between">
-        <h4 class="text-lg text-gray-600">Total MRP</h4>
-        <h4 class="text-lg text-gray-800">₹ 1920</h4>
-      </div>
-      <div class="flex justify-between">
-        <h4 class="text-lg text-gray-600">Discount on MRP</h4>
-        <h4 class="text-lg text-gray-800">₹ 0</h4>
-      </div>
-      <div class="flex justify-between">
-        <h4 class="text-lg text-gray-600">Platform Fee</h4>
-        <h4 class="text-lg text-gray-800">₹ 20</h4>
-      </div>
-      <div class="flex justify-between">
-        <h4 class="text-lg text-gray-600">Shipping Fee</h4>
-        <h4 class="text-lg text-gray-800">FREE</h4>
-      </div>
-    </div>
-    <div class="w-full h-px bg-gray-300 my-6"></div>
-    <div class="flex justify-between">
-      <h3 class="text-xl font-bold text-gray-800">Total Amount</h3>
-      <h3 class="text-xl font-bold text-green-600">₹ 1940</h3>
     </div>
   </div>
 </div>

@@ -1,6 +1,6 @@
 <%- include('./partials/header') %>
 
-<!-- Error Message -->
+
 <% if(error.length > 0) { %>
   <div class="absolute top-16 left-1/2 transform -translate-x-1/2 p-4 rounded-lg bg-red-500 shadow-lg">
     <span class="text-white font-medium"><%= error %></span>
@@ -10,12 +10,11 @@
 
 
 
-<!-- Main Content -->
 <div class="w-full h-screen flex px-20 bg-gradient-to-r from-blue-50 to-purple-50">
-  <!-- Left Section: Register -->
+
   <div class="w-1/2 flex items-center justify-center h-screen">
     <div class="w-full max-w-md px-8 py-10 bg-white rounded-xl shadow-lg">
-      <h3 class="text-4xl font-bold mb-2">Welcome to <span class="text-blue-500">Product Store</span></h3>
+      <h3 class="text-4xl font-bold mb-2">Welcome to <span class="text-blue-500">Hopo Cart Store</span></h3>
       <h4 class="text-2xl text-gray-600 mb-6">Create Your Account</h4>
       <form autocomplete="off" action="/users/register" method="post">
         <input
@@ -36,7 +35,6 @@
     </div>
   </div>
 
-  <!-- Right Section: Login -->
   <div class="w-1/2 flex items-center justify-center h-screen">
     <div class="w-full max-w-md px-8 py-10 bg-white rounded-xl shadow-lg">
       <h4 class="text-2xl font-bold text-gray-800 mb-6">Login to Your Account</h4>
