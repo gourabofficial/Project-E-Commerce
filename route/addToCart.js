@@ -20,7 +20,7 @@ router.get('/addtocart/:id', isLoggedin, async function (req, res) {
 });
 
 
-//remove product 
+//remove product  
 router.post('/cart/remove/:id', isLoggedin, async function (req, res) {
   try {
     let user = await userModel.findOne({ email: req.user.email });

@@ -14,6 +14,7 @@ const indexRouter = require("./route/indexRouter")
 const shopRoutes = require('./route/shopRouter');
 const isLoggedin = require('./middlewares/isLoggedin');
 const addtoCart = require('./route/addToCart');
+const profileRouter = require('./route/profileRouter');
 
 
 require("dotenv").config();
@@ -51,7 +52,9 @@ app.use('/', indexRouter);
 app.use("/owners", ownerRouter);
 app.use("/users", usersRouter);
 app.use("/product", productsRouter);
-app.use('/',addtoCart)
+app.use('/', addtoCart);
+app.use('/', profileRouter);
+
 
 
 app.listen(port, () => {
