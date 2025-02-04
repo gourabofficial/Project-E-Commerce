@@ -1,27 +1,16 @@
 <%- include('./partials/header') %>
 
-<!-- Success Message -->
-<!-- <% if(success.length > 0) { %>
-  <div class="absolute top-16 left-1/2 transform -translate-x-1/2 p-4 bg-blue-500 text-white rounded-lg shadow-lg">
-    <%= success %>
-  </div>
-<% } %> -->
-
-<!-- Main Content -->
 <div class="w-full min-h-screen flex bg-gradient-to-r from-blue-50 to-purple-50">
-  <!-- Sidebar -->
-  <div class="w-[25%] p-8">
+  <div class="w-[25%] p-8 bg-white shadow-lg">
     <div class="flex flex-col space-y-4">
       <a href="#" class="text-gray-600 hover:text-blue-500 transition-all">All Products</a>
       <a href="#" class="text-gray-600 hover:text-blue-500 transition-all">Create New Product</a>
     </div>
   </div>
 
-  <!-- Create Product Form -->
   <div class="w-[75%] bg-white p-8 shadow-lg">
     <h2 class="text-2xl font-bold text-gray-800 mb-6">Create New Product</h2>
     <form autocomplete="off" action="/product/create" method="post" enctype="multipart/form-data">
-      <!-- Product Image -->
       <div class="mb-6">
         <label class="block text-lg font-semibold text-gray-800 mb-2">Product Image</label>
         <input
@@ -31,7 +20,6 @@
           required>
       </div>
 
-      <!-- Product Details -->
       <div class="mb-6">
         <h3 class="text-lg font-semibold text-gray-800 mb-4">Product Details</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -56,7 +44,6 @@
         </div>
       </div>
 
-      <!-- Panel Details -->
       <div class="mb-6">
         <h3 class="text-lg font-semibold text-gray-800 mb-4">Panel Details</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -81,7 +68,6 @@
         </div>
       </div>
 
-      <!-- Submit Button -->
       <button
         class="w-full px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all"
         type="submit">

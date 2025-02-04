@@ -17,7 +17,7 @@ const ownerSchema = mongoose.Schema({
   },
   role: {
     type: String,
-    default: 'admin', // Default role is 'admin'
+    default: 'admin', 
   },
 });
 
