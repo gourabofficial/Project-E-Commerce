@@ -6,13 +6,11 @@ const port = 3000;
 const db = require('./config/mongoose-connection');
 const expressSession = require("express-session");
 const flash = require("connect-flash");
-
 const ownerRouter = require("./route/ownerRouter"); 
 const usersRouter = require("./route/usersRouter"); 
 const productsRouter = require("./route/productsRouter"); 
 const indexRouter = require("./route/indexRouter")
 const shopRoutes = require('./route/shopRouter');
-const isLoggedin = require('./middlewares/isLoggedin');
 const addtoCart = require('./route/addToCart');
 const profileRouter = require('./route/profileRouter');
 
@@ -49,11 +47,11 @@ app.get('/login', (req, res) => {
 
 app.use('/',shopRoutes)
 app.use('/', indexRouter);
-app.use("/owners", ownerRouter);
 app.use("/users", usersRouter);
 app.use("/product", productsRouter);
 app.use('/', addtoCart);
 app.use('/', profileRouter);
+app.use("/", ownerRouter);
 
 
 

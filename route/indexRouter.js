@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const isLoggedin = require('../middlewares/isLoggedin')
+const isLoggedIn = require('../middlewares/isLoggedin');
+const isAdmin = require('../middlewares/isAdmin')
 
 router.get('/', function (req, res) {
   let error = req.flash("error");
@@ -8,9 +9,12 @@ router.get('/', function (req, res) {
 });
 
 
-router.get('addtocart', isLoggedin,async function (req, res) {
+router.get('addtocart', isLoggedIn,async function (req, res) {
   res.render('cart')
  
  });
+
+
+ 
 
 module.exports = router;

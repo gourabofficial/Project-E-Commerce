@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const userModel = require('../model/user-model');
 
+
 module.exports = async function (req, res, next) {
   if (!req.cookies.token) {
     req.flash("error", "You are not logged in");

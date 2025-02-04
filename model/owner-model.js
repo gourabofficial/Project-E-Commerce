@@ -1,22 +1,24 @@
+// owner-model.js
 const mongoose = require('mongoose');
 
 const ownerSchema = mongoose.Schema({
-
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
   fullname: {
     type: String,
     required: true,
-   
   },
-  email: String,
-  password: String,
-  products: {
-    type: Array,
-    default: []
- } ,
- 
-  picture: String,
-  gstin : String,
+  role: {
+    type: String,
+    default: 'admin', // Default role is 'admin'
+  },
 });
-
 
 module.exports = mongoose.model('owner', ownerSchema);

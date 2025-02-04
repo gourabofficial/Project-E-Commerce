@@ -1,4 +1,5 @@
 const userModel = require('../model/user-model');
+const ownerModel = require('../model/owner-model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { generateToken } = require('../utils/generateToken');
@@ -58,7 +59,15 @@ module.exports.loginUser = async function (req, res) {
 
     const token = generateToken(user);
     res.cookie('token', token, { httpOnly: true });
-    res.redirect('/shop');
+
+    req.user = user;
+
+    // Redirect based on role
+    if (user.role === 'admin') {
+      res.redirect('/admin'); 
+    } else {
+      res.redirect('/shop'); 
+    }
   } catch (error) {
     req.flash('error', error.message);
     res.redirect('/login');
@@ -75,3 +84,7 @@ module.exports.logoutUser = async function (req, res) {
     res.redirect("/");
   }
 };
+
+
+
+

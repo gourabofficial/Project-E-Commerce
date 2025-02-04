@@ -25,6 +25,7 @@ const userSchema = mongoose.Schema({
     type: Array,
     default: []
   },
+
   contact: Number,
   picture: String,
 });
