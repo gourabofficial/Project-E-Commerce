@@ -1,76 +1,57 @@
 const express = require('express');
 const router = express.Router();
-const userModel= require('../model/user-model');
 const ownerModel = require('../model/owner-model');
-
-const isLoggedIn = require('../middlewares/isLoggedin');
-const isAdmin = require('../middlewares/isAdmin');
 const bcrypt = require('bcrypt');
+const dotenv = require('dotenv');
 
+dotenv.config();
 
-
-
-
-
-router.post('/create', isLoggedIn, isAdmin, async (req, res) => {
+router.post('/login', async (req, res) => {
   try {
-    const { fullname, email, password } = req.body;
+    const { email, password } = req.body;
 
-    // Validate input data
-    if (!fullname || !email || !password) {
+
+    if (!email || !password) {
       req.flash('error', 'All fields are required');
       return res.redirect('/admin');
     }
 
-    // Check if an admin already exists
-    const existingAdmin = await ownerModel.findOne({ role: 'admin' });
-    if (existingAdmin) {
-      req.flash('error', 'An admin already exists. Only one admin is allowed.');
+    if (email !== process.env.ADMIN_EMAIL || password !== process.env.ADMIN_PASSWORD) {
+      req.flash('error', 'Invalid admin credentials');
       return res.redirect('/admin');
     }
 
-    // Check if the email is already registered
-    const existingUser = await ownerModel.findOne({ email });
-    if (existingUser) {
-      req.flash('error', 'Email already exists');
+    
+    const admin = await ownerModel.findOne({ email, role: 'admin' });
+    if (!admin) {
+      req.flash('error', 'Admin not found');
       return res.redirect('/admin');
     }
 
-    // Hash the password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create the new owner (admin)
-    await ownerModel.create({
-      fullname,
-      email,
-      password: hashedPassword,
-      role: 'admin', // Explicitly set the role as admin
-    });
+    const isMatch = await bcrypt.compare(password, admin.password);
+    if (!isMatch) {
+      req.flash('error', 'Invalid password');
+      return res.redirect('/admin');
+    }
 
-    req.flash('success', 'Admin created successfully');
-    res.render('adminLogin'); // Redirect to admin login page , i will implement 
+    req.flash('success', 'Logged in successfully');
+    res.render('createproducts',{ success: req.flash('success') });
   } catch (error) {
     req.flash('error', 'Something went wrong');
     res.redirect('/admin');
   }
 });
 
-
-
- router.get('/admin', isLoggedIn, isAdmin, (req, res) => {
-    try {
-      let success = req.flash('success');
-      let error = req.flash('error');
-      res.render('adminPanel', { success,error, user: req.user }); // Render the admin panel
-    } catch (error) {
-      req.flash('error', 'Could not load admin panel.');
-      res.redirect('/');
-    }
-  });
-
+router.get('/admin', (req, res) => {
+  try {
+    let success = req.flash('success');
+    let error = req.flash('error');
+    res.render('adminPanel', { success, error, user: req.user }); 
+  } catch (error) {
+    req.flash('error', 'Could not load admin panel.');
+    res.redirect('/');
+  }
+});
 
 module.exports = router;
-
-
-

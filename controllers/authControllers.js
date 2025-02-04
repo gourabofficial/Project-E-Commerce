@@ -18,73 +18,62 @@ module.exports.registerUser = async function (req, res) {
 
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
-  
 
     const newUser = await userModel.create({
       email,
       password: hash,
       fullname,
     });
-    
 
     const token = generateToken(newUser);
-   
 
     res.cookie('token', token, { httpOnly: true });
     console.log('Token cookie set');
 
     req.flash('success', 'Account created successfully');
-    res.redirect('/login'); // i will change 
+    res.redirect('/login');
   } catch (error) {
+    console.error('Error during registration:', error);
     req.flash('error', 'Something went wrong');
     res.redirect('/register');
   }
 };
 
 module.exports.loginUser = async function (req, res) {
-  const { email, password } = req.body;
-
   try {
+    console.log('Login request received:', req.body);
+
+    const { email, password } = req.body;
     const user = await userModel.findOne({ email });
     if (!user) {
-      req.flash('error', 'Email or Password incorrect');
+      console.log('User not found:', email);
+      req.flash('error', 'Invalid email or password');
       return res.redirect('/login');
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      req.flash('error', 'Email or Password incorrect');
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      console.log('Invalid password for user:', email);
+      req.flash('error', 'Invalid email or password');
       return res.redirect('/login');
     }
 
     const token = generateToken(user);
+
     res.cookie('token', token, { httpOnly: true });
+    console.log('Token cookie set');
 
-    req.user = user;
-
-    // Redirect based on role
-    if (user.role === 'admin') {
-      res.redirect('/admin'); 
-    } else {
-      res.redirect('/shop'); 
-    }
+    req.flash('success', 'Logged in successfully');
+    res.redirect('/shop'); 
   } catch (error) {
-    req.flash('error', error.message);
+    console.error('Error during login:', error);
+    req.flash('error', 'Something went wrong');
     res.redirect('/login');
   }
 };
 
-module.exports.logoutUser = async function (req, res) {
-  try {
-    res.clearCookie("token");
-    res.redirect("/");
-  } catch (error) {
-    console.error("Error during logout:", error);
-    req.flash("error", "Something went wrong during logout");
-    res.redirect("/");
-  }
+module.exports.logoutUser = function (req, res) {
+  res.clearCookie('token');
+  req.flash('success', 'Logged out successfully');
+  res.redirect('/login'); 
 };
-
-
-
-
