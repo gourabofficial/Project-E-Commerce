@@ -6,14 +6,14 @@ const { generateToken } = require('../utils/generateToken');
 
 module.exports.registerUser = async function (req, res) {
   try {
-    console.log('Registration request received:', req.body);
+  
 
     const { email, password, fullname } = req.body;
     const user = await userModel.findOne({ email });
     if (user) {
       console.log('User already exists:', email);
       req.flash('error', 'You already have an account');
-      return res.redirect('/register');
+      return res.redirect('/login');
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -28,7 +28,7 @@ module.exports.registerUser = async function (req, res) {
     const token = generateToken(newUser);
 
     res.cookie('token', token, { httpOnly: true });
-    console.log('Token cookie set');
+    
 
     req.flash('success', 'Account created successfully');
     res.redirect('/login');
@@ -41,7 +41,7 @@ module.exports.registerUser = async function (req, res) {
 
 module.exports.loginUser = async function (req, res) {
   try {
-    console.log('Login request received:', req.body);
+ 
 
     const { email, password } = req.body;
     const user = await userModel.findOne({ email });
@@ -53,7 +53,7 @@ module.exports.loginUser = async function (req, res) {
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      console.log('Invalid password for user:', email);
+      
       req.flash('error', 'Invalid email or password');
       return res.redirect('/login');
     }
@@ -61,7 +61,7 @@ module.exports.loginUser = async function (req, res) {
     const token = generateToken(user);
 
     res.cookie('token', token, { httpOnly: true });
-    console.log('Token cookie set');
+   
 
     req.flash('success', 'Logged in successfully');
     res.redirect('/shop'); 
